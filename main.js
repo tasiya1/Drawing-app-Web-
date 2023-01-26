@@ -20,6 +20,7 @@ var is_drawing = false
 var drawingMode = DRAW // drawing mode DRAW by default
 var fill_or_no = false
 var flat = true
+var contour = true
 
 // VALUES
 var prevX = null //var vs var
@@ -73,6 +74,13 @@ flat_checkbox.addEventListener("change", () => {
     if (flat)
         flat = false
     else flat = true
+})
+
+let contour_checkbox= document.getElementById("contour")
+contour_checkbox.addEventListener("change", () => {
+    if (contour)
+        contour = false
+    else contour = true
 })
 
 let pen_color = document.getElementById("pen_color")
@@ -193,14 +201,14 @@ window.addEventListener("mouseup", (ev) => {
         //gr_context.fillStyle = "blue"
         if (fill_or_no)
             gr_context.fillRect(prevX, prevY, (endX-prevX), (endY-prevY))
-        else {
-            gr_context.beginPath
+        if (contour) {
+            gr_context.beginPath()
             gr_context.rect(prevX, prevY, (endX-prevX), (endY-prevY))
-            gr_context.stroke
+            gr_context.stroke()
         }
     } else if (drawingMode == ELLIPSE){
         gr_context.beginPath();
-        gr_context.ellipse(prevX, prevY, Math.abs(endX-prevX)/2, Math.abs(endY-prevY)/2, 0, 0, 2*Math.PI)
+        gr_context.ellipse(prevX+Math.abs(endX-prevX)/2, prevY+Math.abs(endY-prevY)/2, Math.abs(endX-prevX)/2, Math.abs(endY-prevY)/2, 0, 0, 2*Math.PI)
         gr_context.stroke();
     }
 })
