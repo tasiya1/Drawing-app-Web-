@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Drawing app!</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <canvas id="ground"></canvas>
+
+    <div class="nav">
+
+        <input class="clr" type="color" id="pen_color">
+        <input class="clr" type="color" id="brush_color">
+
+        <button class="clear"><img src="icons/ico/clear.ico" class="icon"></button>
+        <button class="save"><img src="icons/ico/save.ico" class="icon"></button>
+
+        <button id="draw_button"><img src="icons/ico/pen.ico" class="icon"></button>
+        <button id="rect_button"><img src="icons/ico/rectangle.ico" class="icon"></button>
+        <button id="ellipse_button"><img src="icons/ico/ellipse.ico" class="icon"></button>
+        <button id="scatter_button"><img src="icons/ico/scatter.ico" class="icon"></button>
+        <button id="neon_button"><img src="icons/ico/color_changer.ico" class="icon"></button>
+        
+            <input type="checkbox" id="fill_rect" unchecked>
+            <label for="scales">fill</label>
+
+            <input type="checkbox" id="flat" unchecked>
+            <label for="scales">flat</label>
+    </div>
+        <script src="main.js"></script>
+
+    </body>
+</html>
