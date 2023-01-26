@@ -21,12 +21,13 @@ var drawingMode = DRAW // drawing mode DRAW by default
 var fill_or_no = false
 var flat = true
 var contour = true
+var ncuts = 8
 
 // VALUES
 var prevX = null //var vs var
 var prevY = null
 
-var cx = 0, xy = 0
+var cx = 0, cy = 0
 
 // DRAWING PARAMETERS
 var color = 0
@@ -37,14 +38,11 @@ var transi = 50
 
 gr_context.lineWidth = penwi
 
-// CLEAR BUTTON
-let clear_button = document.querySelector(".clear")
-clear_button.addEventListener("click", () => {
+document.querySelector(".clear").addEventListener("click", () => {
     gr_context.fillRect(0, 0, canvas.width, canvas.height)
 })
 
-let save_button = document.querySelector(".save")
-save_button.addEventListener("click", () => {
+document.querySelector(".save").addEventListener("click", () => {
     //var  file_name = prompt("Повне ім'я файлу:");
     let data = canvas.toDataURL("imag/jpg")
     let canvas_image = document.createElement("a")
@@ -54,30 +52,22 @@ save_button.addEventListener("click", () => {
     canvas_image.click()
 })
 
-let draw_button = document.getElementById("draw_button")
-draw_button.addEventListener("click", () => {drawingMode = DRAW})
+// DRAWING MODE CHANGE
+document.getElementById("draw_button").addEventListener("click", () => {drawingMode = DRAW})
+document.getElementById("rect_button").addEventListener("click", () => {drawingMode = RECT})
+document.getElementById("scatter_button").addEventListener("click", () => {drawingMode = SCATTER})
+document.getElementById("ellipse_button").addEventListener("click", () => {drawingMode = ELLIPSE})
+document.getElementById("neon_button").addEventListener("click", () => {drawingMode = NEON})
+document.getElementById("star_button").addEventListener("click", () => drawingMode = STAR)
 
-let rect_button = document.getElementById("rect_button")
-rect_button.addEventListener("click", () => {drawingMode = RECT})
-
-let scatter_button = document.getElementById("scatter_button")
-scatter_button.addEventListener("click", () => {drawingMode = SCATTER})
-
-let ellipse_button = document.getElementById("ellipse_button")
-ellipse_button.addEventListener("click", () => {drawingMode = ELLIPSE})
-
-let neon_button = document.getElementById("neon_button")
-neon_button.addEventListener("click", () => {drawingMode = NEON})
-
-let flat_checkbox = document.getElementById("flat")
-flat_checkbox.addEventListener("change", () => {
+// DRAWING PARAMETERS CHANGE
+document.getElementById("flat").addEventListener("change", () => {
     if (flat)
         flat = false
     else flat = true
 })
 
-let contour_checkbox= document.getElementById("contour")
-contour_checkbox.addEventListener("change", () => {
+document.getElementById("contour").addEventListener("change", () => {
     if (contour)
         contour = false
     else contour = true
@@ -87,7 +77,6 @@ let pen_color = document.getElementById("pen_color")
 let brush_color = document.getElementById("brush_color")
 let fill_checkbox = document.getElementById("fill_rect")
 
-// FUNCTIONS
 
 function rand(from, to){
     let r = Math.floor(Math.random() * (to - from) + from);
@@ -95,6 +84,7 @@ function rand(from, to){
     return r
 }
 
+// DRAWING FUNCTIONS
 function scatter(x, y){
     let lx, ly
     for (let i = 0; i < densi; i++) {
@@ -102,12 +92,10 @@ function scatter(x, y){
         var a = Math.random()
         var b = Math.random()
 
-        if (flat){
-            if (b < a){
-                var temp = a
-                a = b
-                b = temp
-            }
+        if (flat && b < a){
+            let temp = a
+            a = b
+            b = temp
         }
 
         lx = b*diami*Math.cos(2*Math.PI*(a/b))+x
@@ -115,7 +103,6 @@ function scatter(x, y){
         gr_context.fillRect(lx, ly, 0.5, 0.5)
     }
 }
-
 // ggogl JS get&setPixel when i get the electricity
 
 function circleCoords(centreX, centreY, radius, i, ncuts){
@@ -129,11 +116,10 @@ function circleCoords(centreX, centreY, radius, i, ncuts){
     console.log("X: " + cx + "   Y: " + cy)
 }
 
-
 function drawStar(startX, startY, endX, endY, ncuts){
     var curAngle = 0.8
-    var centreX = Math.abs(endX-startX)/2
-    var centreY = Math.abs(endY-startY)/2
+    var centreX = (endX+startX)/2
+    var centreY = (endY+startY)/2
     gr_context.beginPath
 
     var r = Math.min(Math.abs(endX-startX), Math.abs(endY-startY))
@@ -170,12 +156,8 @@ drawStar(200, 200, 400, 500, 10)
 //----------------------------------------------------------------------EVENT LISTENERS--------
 
 // ---------------------------------COLOR CHANGE----------------------
-pen_color.addEventListener("input", (event) => {
-    gr_context.strokeStyle = (event.target.value + 50)
-    color = event.target.value
-})
+pen_color.addEventListener("input", (event) => {gr_context.strokeStyle = event.target.value})
 pen_color.addEventListener("change", (event) => {gr_context.strokeStyle = event.target.value})
-
 brush_color.addEventListener("input", (event) => {gr_context.fillStyle = event.target.value})
 brush_color.addEventListener("change", (event) => {gr_context.fillStyle = event.target.value})
 
@@ -208,8 +190,10 @@ window.addEventListener("mouseup", (ev) => {
         }
     } else if (drawingMode == ELLIPSE){
         gr_context.beginPath();
-        gr_context.ellipse(prevX+Math.abs(endX-prevX)/2, prevY+Math.abs(endY-prevY)/2, Math.abs(endX-prevX)/2, Math.abs(endY-prevY)/2, 0, 0, 2*Math.PI)
+        gr_context.ellipse((endX+prevX)/2, (endY+prevY)/2, Math.abs(endX-prevX)/2, Math.abs(endY-prevY)/2, 0, 0, 2*Math.PI)
         gr_context.stroke();
+    } else if (drawingMode == STAR){
+        drawStar(prevX, prevY, endX, endY, ncuts*2)
     }
 })
 
