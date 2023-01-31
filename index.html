@@ -2,41 +2,108 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Drawing app!</title>
         <link rel="stylesheet" href="style.css">
     </head>
 
-    <body>
-        <canvas id="ground"></canvas>
+    <body onselectstart="return false">
 
-    <div class="nav">
+    <div class="nav" id="sideBar">
+        <fieldset>
+            <button id="close_button" class="closebtn"><img src="icons/png/close.png" height="32" width="32" class="icon"></button>
+            <input class="clr" type="color" id="pen_color" value="#0057b7">
+            <input class="clr" type="color" id="brush_color" value="#ffd700">
+        </fieldset>
+        <fieldset>
+            <button id="undo_button" class="icon"><img src="icons/png/undo.png" height="32" width="32" ></button>
+            <button id="redo_button" class="icon"><img src="icons/png/redo.png" height="32" width="32"></button>
+        </fieldset>
+        <fieldset>
+            <button class="clear"><img src="icons/ico/clear.ico" class="icon"></button>
+            <button class="save"><img src="icons/ico/save.ico" class="icon"></button>
+        </fieldset>
+        <fieldset>
+            <button id="draw_button"><img src="icons/ico/pen.ico" class="icon"></button>
+            <button id="bridge_button"><img src="icons/png/connective.png" height="32" width="32" class="icon"></button>
+            <button id="airbrush_button"><img src="icons/png/airbrush.png" height="32" width="32" class="icon"></button>
+            <button id="drops_button"><img src="icons/png/drops.png" height="32" width="32" class="icon"></button>
+            <button id="strokes_button"><img src="icons/png/strokes.png" height="32" width="32" class="icon"></button>
+            <button id="rect_button"><img src="icons/ico/rectangle.ico" class="icon"></button>
+            <button id="ellipse_button"><img src="icons/ico/ellipse.ico" class="icon"></button>
+            <button id="scatter_button"><img src="icons/ico/scatter.ico" class="icon"></button>
+            <button id="bucket_button"><img src="icons/ico/bucket.ico" class="icon"></button>
+            <button id="neon_button"><img src="icons/ico/color_changer.ico" class="icon"></button>
+            <button id="star_button"><img src="icons/png/star.png" height="32" width="32" class="icon"></button>
+            <button id="invert_button"><img src="icons/png/invert.png" height="32" width="32" class="icon"></button>
+        </fieldset>
+        <fieldset><button id="baza_button"><img src="icons/png/baza.png" height="32" width="32" class="icon"></button></fieldset>
+        <fieldset>
+            <h4>Pen</h4>
+            <p>Main pen size</p>
+            <input type="range" min="1" max="50" value="1" id="pen_size">
+            <label for="pen_size" id="pen_size_label"></label>
 
-        <input class="clr" type="color" id="pen_color">
-        <input class="clr" type="color" id="brush_color">
+            <p>Secondary size</p>
+            <input type="range" min="10" max="100" value="50" id="radius">
+            <label for="radius" id="radius_label"></label>
 
-        <button class="clear"><img src="icons/ico/clear.ico" class="icon"></button>
-        <button class="save"><img src="icons/ico/save.ico" class="icon"></button>
+            <p>Particle density</p>
+            <input type="range" min="1" max="40" value="20" id="density">
+            <label for="density" id="density_label"></label>
 
-        <button id="draw_button"><img src="icons/ico/pen.ico" class="icon"></button>
-        <button id="rect_button"><img src="icons/ico/rectangle.ico" class="icon"></button>
-        <button id="ellipse_button"><img src="icons/ico/ellipse.ico" class="icon"></button>
-        <button id="scatter_button"><img src="icons/ico/scatter.ico" class="icon"></button>
-        <button id="neon_button"><img src="icons/ico/color_changer.ico" class="icon"></button>
-        <button id="star_button"><img src="icons/png/star.png" height="32" width="32" class="icon"></button>
-        
+            <p>Jitter</p>
+            <input type="range" min="0" max="100" value="15" id="jitter_slider">
+            <label for="jitter_slider" id="jitter_slider_label"></label>
+
+            <h4>Star</h4>
+            <p>Star corners</p>
+            <input type="range" min="3" max="50" value="5" id="star_ncuts">
+            <label for="star_ncuts" id="star_ncuts_label"></label>
+
+            <p>Radius divider</p>
+            <input type="range" min="1" max="10" value="2" id="inner_radius">
+            <label for="inner_radius" id="inner_radius_label"></label>
+
+            <h4>Bridge</h4>
+            <p>Point recentness</p>
+            <input type="range" min="5" max="300" value="10" id="recentness_slider">
+            <label for="recentness_slider" id="recentness_slider_label"></label>
+
+            <p>Connectivity range</p>
+            <input type="range" min="10" max="1000" value="300" id="connectivity_slider">
+            <label for="connectivity_slider" id="connectivity_slider_label"></label>
+
+            <h4>Strokes</h4>
+            <p>Distance between strokes</p>
+            <input type="range" min="2" max="50" value="7" id="strokes_slider">
+            <label for="strokes_slider" id="strokes_slider_label"></label>
+
+            <p>Amount of strokes</p>
+            <input type="range" min="2" max="15" value="4" id="nstrokes_slider">
+            <label for="nstrokes_slider" id="nstrokes_slider_label"></label>
+
+        </fieldset>
+        <fieldset>
             <input type="checkbox" id="fill_rect" unchecked>
             <label for="fill_rect">fill</label>
 
-            <input type="checkbox" id="flat" checked>
-            <label for="flat">flat</label>
+            <input type="checkbox" id="flat" unchecked>
+            <label for="flat">flat spray</label>
 
             <input type="checkbox" id="contour" checked>
             <label for="contour">contour</label>
-    </div>
-        <script src="main.js"></script>
 
+            <input type="checkbox" id="jitter" unchecked>
+            <label for="jitter">jitter</label>
+        </fieldset>
+    </div>
+
+    <span onclick="openSideBar()" class="menuButton"><button id="menu_button"><img src="icons/png/menu.png" height="32" width="32" class="icon"></button></span>
+
+    <div id="main"><canvas id="ground" style="left: 160;"></canvas></div>
+        
+    <script src="main.js"></script>
     </body>
 </html>
