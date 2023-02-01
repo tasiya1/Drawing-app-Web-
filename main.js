@@ -22,6 +22,7 @@ const BRIDGE = 8
 const AIRBRUSH = 9
 const DROPS = 10
 const STROKES = 11
+const WATERMELON = 12
 
 // DRAWING STATUSES
 var is_drawing = false
@@ -40,6 +41,8 @@ var cx = 0, cy = 0
 var color1 = "#0057b7"
 var color2 = "#ffd700"
 
+var r, g, b
+
 // DRAWING PARAMETERS
 var penwi = 1
 var diami = 50
@@ -49,6 +52,7 @@ var ncuts = 5
 var n = 2
 var point_recentness = 10
 var connectivity_range = 300
+var line_offset = 0
 var nlines = 5
 var linedistance = 10
 var jitter_range = 15
@@ -61,7 +65,11 @@ gr_context.strokeStyle = "#0057b7"
 gr_context.fillStyle = "#ffd700"
 
 document.querySelector(".clear").addEventListener("click", () => {
+    gr_context.fillStyle = color2
     gr_context.fillRect(0, 0, canvas.width, canvas.height)
+    gr_context.beginPath();
+    //canvas.width = canvas.width
+    //canvas.height = canvas.height
 })
 
 document.querySelector(".save").addEventListener("click", () => {
@@ -81,11 +89,12 @@ document.getElementById("scatter_button").addEventListener("click", () => drawin
 document.getElementById("ellipse_button").addEventListener("click", () => drawingMode = ELLIPSE)
 document.getElementById("neon_button").addEventListener("click", () => drawingMode = NEON)
 document.getElementById("star_button").addEventListener("click", () => drawingMode = STAR)
-document.getElementById("bucket_button").addEventListener("click", () => drawingMode = FILL)
+//document.getElementById("bucket_button").addEventListener("click", () => drawingMode = FILL)
 document.getElementById("bridge_button").addEventListener("click", () => drawingMode = BRIDGE)
 document.getElementById("airbrush_button").addEventListener("click", () => drawingMode = AIRBRUSH)
 document.getElementById("drops_button").addEventListener("click", () => drawingMode = DROPS)
 document.getElementById("strokes_button").addEventListener("click", () => drawingMode = STROKES)
+document.getElementById("baza_button").addEventListener("click", () => drawingMode = WATERMELON)
 
 
 // SLIDERS CHANGE
@@ -97,6 +106,15 @@ pen_size.addEventListener("input", () => {
     gr_context.lineWidth = pen_size.value;
     penwi = pen_size.value
     pen_size_label.innerHTML = pen_size.value;
+})
+
+var transparency_slider = document.getElementById("transparency_slider");
+var transparency_slider_label = document.getElementById("transparency_slider_label");
+transparency_slider_label.innerHTML = transparency_slider.value;
+transi = transparency_slider.value;
+transparency_slider.addEventListener("input", () => {
+    transi = transparency_slider.value;
+    transparency_slider_label.innerHTML = transparency_slider.value;
 })
 
 var radius = document.getElementById("radius");
@@ -171,6 +189,24 @@ connectivity_slider.addEventListener("input", () => {
     connectivity_slider_label.innerHTML = connectivity_slider.value;
 })
 
+var bridge_transi_slider = document.getElementById("bridge_transi_slider");
+var bridge_transi_slider_label = document.getElementById("bridge_transi_slider_label");
+bridge_transi_slider_label.innerHTML = bridge_transi_slider.value;
+bridge_transi = bridge_transi_slider.value;
+bridge_transi_slider.addEventListener("input", () => {
+    bridge_transi = bridge_transi_slider.value;
+    bridge_transi_slider_label.innerHTML = bridge_transi_slider.value;
+})
+
+var offset_slider = document.getElementById("offset_slider");
+var offset_slider_label = document.getElementById("offset_slider_label");
+offset_slider_label.innerHTML = offset_slider.value;
+line_offset = offset_slider.value;
+offset_slider.addEventListener("input", () => {
+    line_offset = offset_slider.value;
+    offset_slider_label.innerHTML = offset_slider.value;
+})
+
 var strokes_slider = document.getElementById("strokes_slider");
 var _strokes_sliderlabel = document.getElementById("strokes_slider_label");
 strokes_slider_label.innerHTML = strokes_slider.value;
@@ -214,7 +250,8 @@ function setRGBA(r, g, b, a){
 }
 
 function updatePen(){
-    gr_context.globalAlpha = 1.0
+    gr_context.lineCap = "round"
+    gr_context.globalAlpha = transi/100
     gr_context.lineWidth = penwi
     if (drawingMode == NEON){
         gr_context.strokeStyle = "white"
@@ -295,25 +332,30 @@ function invert(){
     gr_context.putImageData(img, 0, 0)
 }
 
+function pointsWithinCircle(d, x, y){
+    let lx, ly    
+    var a = Math.random()
+    var b = Math.random()
+
+    if (flat && b < a){
+        let temp = a
+        a = b
+        b = temp
+    }
+    lx = b*d*Math.cos(2*Math.PI*(a/b))+x
+    ly = b*d*Math.sin(2*Math.PI*(a/b))+y
+
+    return [lx, ly]
+}
+
 function scatter(x, y){
-    let lx, ly
+    var p = []
     for (let i = 0; i < densi; i++) {
         
-        var a = Math.random()
-        var b = Math.random()
-
-        if (flat && b < a){
-            let temp = a
-            a = b
-            b = temp
-        }
-
-        lx = b*diami*Math.cos(2*Math.PI*(a/b))+x
-        ly = b*diami*Math.sin(2*Math.PI*(a/b))+y
-        //gr_context.fillRect(lx, ly, 0.5, 0.5)
+        p = pointsWithinCircle(diami, x, y)
         gr_context.beginPath()
-        gr_context.moveTo(lx, ly)
-        gr_context.lineTo(lx, ly)
+        gr_context.moveTo(p[0], p[1])
+        gr_context.lineTo(p[0], p[1])
         gr_context.stroke()
     }
 }
@@ -329,20 +371,51 @@ function circleCoords(centreX, centreY, radius, i, ncuts){
 // MAKE COLOR PALETTE !!
 
 function bridge(prevX, prevY, curX, curY){
-    gr_context.moveTo(prevX, prevY)
-    gr_context.lineTo(curX, curY)
+    // gr_context.moveTo(prevX, prevY)
+    // gr_context.lineTo(curX, curY)
+
+    // var i
+    // if (pointArray.length >= (point_recentness + 1))
+    //     i = pointArray.length - point_recentness - 1
+    // else i = 0
+    // for (; i < pointArray.length; i++){
+    // var dx = pointArray[i][0]-curX
+    // var dy = pointArray[i][1]-curY
+    // var d = dx * dx + dy * dy;
+    //     if (d < connectivity_range*connectivity_range){
+    //         gr_context.moveTo(curX+dx*0.2, curY+dy*0.2)
+    //         gr_context.lineTo(pointArray[i][0]-dx*0.2, pointArray[i][1]+dy*0.2)
+    //         gr_context.stroke();
+    //     }
+    // }
+
+    //gr_context.moveTo(prevX, prevY)
+    //gr_context.lineTo(curX, curY)
 
     var i
     if (pointArray.length >= (point_recentness + 1))
         i = pointArray.length - point_recentness - 1
     else i = 0
     for (; i < pointArray.length; i++){
-    var dx = pointArray[i][0]-curX
-    var dy = pointArray[i][1]-curY
-    var d = dx * dx + dy * dy;
+        gr_context.globalAlpha = (transi/100)
+        gr_context.beginPath()
+        gr_context.moveTo(prevX, prevY)
+        gr_context.lineTo(curX, curY)
+        gr_context.stroke()
+
+        var dx = pointArray[i][0]-curX
+        var dy = pointArray[i][1]-curY
+        var d = dx * dx + dy * dy;
         if (d < connectivity_range*connectivity_range){
-            gr_context.moveTo(curX, curY)
-            gr_context.lineTo(pointArray[i][0], pointArray[i][1])
+            gr_context.globalAlpha = (bridge_transi/100)
+            var odx = dx*(line_offset/10)
+            var ody = dy*(line_offset/10)
+            gr_context.beginPath()
+            //var rgb = extractRGB(color1)
+            //gr_context.strokeStyle = setRGBA(rgb[0], rgb[1], rgb[2], transi*25.5)
+
+            gr_context.moveTo((curX > pointArray[i][0])?(curX+odx):(curX-odx), (curY > pointArray[i][1])?(curY+ody):(curY-ody))
+            gr_context.lineTo((curX > pointArray[i][0])?(pointArray[i][0]-odx):(pointArray[i][0]+ody), (curY > pointArray[i][1])?(pointArray[i][1]-ody):(pointArray[i][1]+ody))
             gr_context.stroke();
         }
     }
@@ -389,10 +462,14 @@ function drawStar(startX, startY, endX, endY, ncuts){
 //----------------------------------------------------------------------EVENT LISTENERS--------
 document.getElementById("invert_button").addEventListener("click", () => invert())
 // ---------------------------------COLOR CHANGE----------------------
-pen_color.addEventListener("input", (event) => {color1 = event.target.value})
-pen_color.addEventListener("change", (event) => {color1 = event.target.value})
-brush_color.addEventListener("input", (event) => {color2 = event.target.value})
-brush_color.addEventListener("change", (event) => {color2 = event.target.value})
+pen_color.addEventListener("input", (event) => {color1 = event.target.value
+    updatePen()})
+pen_color.addEventListener("change", (event) => {color1 = event.target.value
+    updatePen()})
+brush_color.addEventListener("input", (event) => {color2 = event.target.value
+    updatePen()})
+brush_color.addEventListener("change", (event) => {color2 = event.target.value
+    updatePen()})
 
 // --------------------DRAWING PARAMETERS CHANGE----------------------
 
@@ -405,6 +482,7 @@ var pointArray = [[0, 0]]
 canvas.addEventListener("mousedown", (ev) => {
     is_drawing = true
     updatePen()
+    gr_context.beginPath() // to prevent changing the properties of finished objects
 
     pointArray.splice(0, pointArray.length)
 
@@ -435,8 +513,11 @@ canvas.addEventListener("mouseup", (ev) => {
 
     } else if (drawingMode == STAR){
         drawStar(prevX, prevY, endX, endY, ncuts*2)
-    } else if (drawingMode == FILL)
+    } else if (drawingMode == FILL){
         paintAt(endX, endY)
+    } else if (drawingMode == WATERMELON){
+        watermelon(prevX, prevY, endX, endY)
+    }
 })
 
 function midPoint(x1, y1, x2, y2){
@@ -453,15 +534,15 @@ function draw(prevX, prevY, curX, curY){
 }
 
 function stroke(prevX, prevY, curX, curY){
-    gr_context.globalAlpha = 1
-    gr_context.beginPath();
+    gr_context.globalAlpha = transi/100
     var inc_dist = 0
-    for (let i = 0; i < nlines; i++){
+    for (let i = 1; i <= nlines; i++){
+        gr_context.beginPath()
         gr_context.moveTo(prevX, prevY+inc_dist);
         gr_context.lineTo(curX, curY+inc_dist);
         gr_context.stroke();
-        inc_dist += linedistance
-        gr_context.globalAlpha -= 1/nlines
+        inc_dist = linedistance*i
+        gr_context.globalAlpha -= (transi/100)/nlines
     }
 }
 
@@ -486,26 +567,108 @@ function angleBetweenPoints(prevX, prevY, curX, curY){
     return Math.atan2(curX - prevX, curY - prevY);
 }
 
+function extractRGB(color){
+    const R = parseInt(color.substr(1,2), 16)
+    const G = parseInt(color.substr(3,2), 16)
+    const B = parseInt(color.substr(5,2), 16)
+    return [R, G, B]
+}
+
 function airbrush(prevX, prevY, curX, curY){
     var x, y
 
     var dist = distanceBetweenPoints(prevX, prevY, curX, curY)
     var angle = angleBetweenPoints(prevX, prevY, curX, curY)
 
-    gr_context.globalAlpha = 0.01
+    gr_context.globalAlpha = transi/100
     for (let i = 0; i < dist; i+=5){
         x = prevX + Math.sin(angle)*i
         y = prevY + Math.cos(angle)*i
 
         var brush_airbrush = gr_context.createRadialGradient(x, y, 1, x, y, penwi)
 
-        brush_airbrush.addColorStop(0, "rgba(0,0,0,1)")
+        var rgb = extractRGB(color1)
+
+        brush_airbrush.addColorStop(0, setRGBA(rgb[0], rgb[1], rgb[2], 1))
         //brush_airbrush.addColorStop(0.2, color1)
         //brush_airbrush.addColorStop(0.3, "rgba(0,0,0,0.2)")
-        brush_airbrush.addColorStop(1, "rgba(0,0,0,0)")
+        brush_airbrush.addColorStop(0.5, setRGBA(rgb[0], rgb[1], rgb[2], 0.5))
+        brush_airbrush.addColorStop(1, setRGBA(rgb[0], rgb[1], rgb[2], 0))
 
         gr_context.fillStyle = brush_airbrush
         gr_context.fillRect(x-penwi, y-penwi, 2*penwi, 2*penwi)
+    }
+}
+
+function watermelon(prevX, prevY, curX, curY){
+
+    var red = "rgb(255, 25, 0)"
+    var white = "rgb(255, 255, 255)"
+    var green = "rgb(66, 189, 0)"
+
+    var centreX = (curX+prevX)/2
+    var centreY = (curY+prevY)/2
+    var rad = Math.abs(curY-prevY)/2
+/*
+    pointArray.splice(0, pointArray.length)
+
+    var r = Math.min(Math.abs(curX-prevX), Math.abs(curY-prevY))
+    console.log(r)
+    r = Math.sqrt(r*r)/2
+    //console.log(r)
+    var br = r + penwi*2
+    var linePoints = []
+    for (let i = 1; i <= ncuts; i++) {
+            //gr_context.beginPath()
+            circleCoords(centreX, centreY, br, i, ncuts*4)
+            linePoints.push([cx, cy])
+            circleCoords(centreX, centreY, r, i, ncuts*4)
+            pointArray.push([cx, cy])
+            if (i==1){
+                gr_context.moveTo(cx, cy)
+                var sx = cx
+                var sy = cy
+            } 
+            //gr_context.lineTo(cx, cy)
+            gr_context.strokeStyle = red
+            bridge(cx, cy, cx, cy)
+            gr_context.beginPath()
+            //gr_context.strokeStyle = green
+            //gr_context.lineTo(cx, cy)
+            gr_context.moveTo(cx, cy)
+    }
+    
+    gr_context.stroke()
+    gr_context.lineTo(sx, sy)
+    gr_context.stroke()
+*/
+    gr_context.strokeStyle = "rgba(0,0,0,0)"
+    gr_context.beginPath()
+    gr_context.fillStyle = green
+    gr_context.arc(centreX, centreY, rad, 0, Math.PI)
+    gr_context.fill()
+    gr_context.beginPath()
+
+    gr_context.fillStyle = white
+    gr_context.arc(centreX, centreY, rad*0.9, 0, Math.PI)
+    gr_context.fill()
+    gr_context.beginPath()
+
+    gr_context.fillStyle = red
+    gr_context.arc(centreX, centreY, rad*0.8, 0, Math.PI)
+    var redgr = gr_context.createRadialGradient(centreX, centreY, 1, centreX, centreY, rad)
+    redgr.addColorStop(0.2, "rgb(255, 25, 0)")
+    redgr.addColorStop(0.9, "rgb(255, 255, 255)")
+    gr_context.fillStyle = redgr
+    gr_context.fill()
+    gr_context.stroke()
+    var seed = []
+    gr_context.strokeStyle = "rgba(62,43,30,255)"
+    gr_context.beginPath()
+    for (let i = 0; i < 20; i++){
+        seed = pointsWithinCircle(rad*0.8, centreX, centreY)
+        if (seed[1] >= centreY)
+            drawStar(seed[0], seed[1], seed[0]+jitter_range*Math.random(), seed[1]+jitter_range*Math.random(), 10)
     }
 }
 
@@ -529,7 +692,7 @@ canvas.addEventListener("mousemove", (ev) => {
         //return
     } else if (is_drawing){
         if(drawingMode == DRAW || drawingMode == NEON){
-            stroke(prevX, prevY, curX, curY)
+            draw(prevX, prevY, curX, curY)
         } else if (drawingMode == BRIDGE) {
             bridge(prevX, prevY, curX, curY)
         } else if (drawingMode == AIRBRUSH) {
@@ -542,7 +705,7 @@ canvas.addEventListener("mousemove", (ev) => {
             drops(prevX, prevY, curX, curY)
         }
     }
-    if (drawingMode != RECT && drawingMode != ELLIPSE && drawingMode != STAR){
+    if (drawingMode != RECT && drawingMode != ELLIPSE && drawingMode != STAR && drawingMode != WATERMELON) {
         prevX = curX
         prevY = curY
     }

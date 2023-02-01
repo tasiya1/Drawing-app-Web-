@@ -1,0 +1,101 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Ebrima;
+  color: #ffffff;
+}
+
+canvas { 
+  border: 1px solid #ccc;
+}
+
+input {
+  margin: 0.4rem;
+}
+
+fieldset{
+  padding: 10px;
+  border-color: transparent;
+}
+
+.nav{
+/*width: 650px;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;*/
+  
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgba(41, 41, 41, 0.7);
+  overflow-x: hidden;
+  padding-top: 0px;
+  transition: 0.3s;
+  display: inline-flexbox;
+}
+
+.menuButton{
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 0px;
+  transition: 0.0s;
+}
+
+.pen_size{
+  height: 16;
+}
+
+.icon{
+  height: 32;
+width: 32;
+}
+
+.clr{
+  height: 50px;
+  width: 50px;
+
+}
+
+button{
+  border: none;
+  outline: none;
+  margin: 5px;
+  background-color: #ffffff;
+  color: #fff;
+  border-radius: 10%;
+  padding: 8px 8px 8px 8px;
+  display: table-cell;
+  transition: 0.3s;
+}
+
+.sidenav button:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  margin: 50px;
+}
+
+button:hover{
+    transition-delay: 0.1s;
+    opacity: 1;
+    transform: scale(1.2);
+}
+.save{
+  background-color: #ffffff;
+}
