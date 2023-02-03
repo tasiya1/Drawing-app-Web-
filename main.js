@@ -236,7 +236,7 @@ let fill_checkbox = document.getElementById("fill_rect")
 document.getElementById("undo_button").addEventListener("click", () => undo())
 document.getElementById("redo_button").addEventListener("click", () => redo())
 document.getElementById("grid_button").addEventListener("click", () => document.getElementById("gridBar").style.width = "250px")
-document.getElementById("closeGrid").addEventListener("click", () => cdocument.getElementById("gridBar").style.width = "0")
+document.getElementById("closeGrid").addEventListener("click", () => document.getElementById("gridBar").style.width = "0")
 
 var x1=0, y1=0, w1=0, h1=0, offx=0, offy=0, nx=0, ny=0
 document.getElementById("sx_grid").addEventListener("click", (e) => {
