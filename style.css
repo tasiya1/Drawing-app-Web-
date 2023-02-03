@@ -1,0 +1,160 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Candara Light";
+  color: #eaeaea;
+}
+
+canvas { 
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+input {
+  margin: 0.4rem;
+}
+
+fieldset{
+  padding: 5px;
+  border-color: transparent;
+}
+
+h3{
+  margin-top: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.nav{
+/*width: 650px;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;*/
+  
+  height: 100%;
+  width: 0px;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  background-image: url(design/background.png);
+  overflow-x: hidden;
+  padding-top: 20px;
+  transition: 0.3s;
+  display: inline-flexbox;
+}
+
+.undoredo{
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.settings{
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  background-image: url(design/background.png);
+  overflow-x: hidden;
+  padding-top: 0px;
+  transition: 0.3s;
+  display: inline-flexbox;
+}
+
+.menuButton{
+  position:fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  padding-top: 0px;
+  transition: duration 0ms;
+  background-color: rgba(0,0,0,0);
+}
+
+.icon{
+  height: 30px;
+  width: 30px;
+}
+
+button{
+  border: none;
+  outline: none;
+  margin: 5px;
+  background-color: #ffffff;
+  color: #fff;
+  border-radius: 10%;
+  padding: 8px 8px 8px 8px;
+  display: table-cell;
+  transition: 0.3s;
+}
+
+h4{
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.sidenav button:hover {
+  color: #f1f1f1;
+}
+
+.close {
+  background-color: rgba(0,0,0,0);
+  float: right;
+}
+
+.userColor{
+  margin-top: 30px;
+  height: 40px;
+  width: 40px;
+}
+
+.settings_container{
+  margin: 10px;
+  display: list-item;
+}
+
+.settings_button{
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.settings .close_settings{
+  top: 0;
+  right: 0;
+  margin: 50px;
+}
+
+button:hover{
+  transition-delay: 0.1s;
+  transform: scale(1.2);
+}
+
+/* Palette colors */
+
+.palette{
+  height: 40px;
+  width: 40px;
+  background-color: #ffffff;
+  margin: 5px;
+  transition: 0.3s;
+}
+
+.palette:hover{
+  transform: scale(1.1);
+}
+
+.palette_cell_container{
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}

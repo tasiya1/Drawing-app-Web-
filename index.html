@@ -8,18 +8,13 @@
         <link rel="stylesheet" href="style.css">
     </head>
 
-    <body onselectstart="return false">
-
     <div class="nav" id="sideBar">
-        <fieldset>
-            
-        </fieldset>
         <fieldset>
             <button id="close_button" class="close" accesskey="esc"><img src="icons/png/close.png" class="icon"></button>
 
             <input class="userColor" type="color" id="pen_color" title="Pen color" value="#0057b7">
             <input class="userColor" type="color" id="brush_color" title="Fill color" value="#ffd700">
-            <button id="palette_button" class="userColor"><img src="icons/png/palette.png" class="icon"></button>
+            <button id="palette_button" class="userColor" title="Color palettes"><img src="icons/png/palette.png" class="icon"></button>
             <input type="range" min="0" max="100" value="100" id="transparency_slider" title="Transparency of pen">
             <label for="transparency_slider" id="transparency_slider_label"></label>
         </fieldset>
@@ -41,10 +36,12 @@
             
             <button id="scatter_button" title="Scatter"><img src="icons/png/scatter.png" class="icon"></button>
             <button id="neon_button" title="Neon pen"><img src="icons/png/neon.png" class="icon"></button>
-            
+        </fieldset>   
+        <fieldset>
             <button id="invert_button" title="Invert filter"><img src="icons/png/invert.png" class="icon"></button>
-            <button id="grid_button" title="Add grid"><img src="icons/png/dot.png" class="icon"></button>
+            <button id="grid_button" title="Add grid"><img src="icons/png/grid.png" class="icon"></button>
         </fieldset>
+       
 
         <fieldset>
             <button id="rect_button" title="Rectangle"><img src="icons/png/rectangle.png" class="icon"></button>
@@ -53,7 +50,7 @@
         </fieldset>
 
         <fieldset><button id="baza_button" title="Watermelon"><img src="icons/png/baza.png" class="icon"></button></fieldset>
-        <fieldset><div class="settings_container">
+        <fieldset>
             <p>Stroke width</p>
             <input type="range" min="1" max="100" value="1" id="pen_size" title="Sets the width of drawing line">
             <label for="pen_size" id="pen_size_label"></label>
@@ -62,15 +59,17 @@
             <input type="range" min="10" max="500" value="50" id="radius" title="Sets the size for secondary properties(size of scatter, size of neon light etc.)">
             <label for="radius" id="radius_label"></label>
             <p><b>Settings</b></p>
-            <button id="settings_button" class="settings_button"><img src="icons/png/settings.png" class="icon"></button>
-        </div>
-            
+            <button id="settings_button" class="settings_button"><img src="icons/png/settings.png" class="icon"></button>            
         </fieldset>
         </div>
 
         <div class="nav" id="settingsBar">
             <button id="close_settings" class="close"><img src="icons/png/back.png" class="icon"></button>        
         <fieldset>
+            <h3>Line</h3>
+            <input type="checkbox" id="round" checked>
+            <label for="round" title="Sets the shape(circle or line) for drawing lines">Round line cap</label>
+
             <h3>Scatter</h3>
             <p>Particle density</p>
             <input type="range" min="1" max="40" value="20" id="density" title="Density of dots in scatter">
@@ -130,86 +129,126 @@
             <label for="nstrokes_slider" id="nstrokes_slider_label"></label>
     </div>
 
+    <div id="gridBar" class="nav">
+        <div class="settings_container">
+        <button id="closeGrid" class="close"><img src="icons/png/back.png" class="icon"></button>
+        <!--var x1=300, y1=100, w1=100, h1=100, ix=350, iy=250, ngridx = 3, ngridy = 3-->
+        <p>Start X</p>
+        <input type="range" min="0" max="1000" value="0" id="sx_grid">
+        <label id="sxL" for="sx_grid">0</label>
+
+        <p>Start Y</p>
+        <input type="range" min="0" max="1000" value="0" id="sy_grid">
+        <label id="syL" for="sy_grid">0</label>
+
+        <p>Width of cell</p>
+        <input type="range" min="0" max="2000" value="0" id="w_grid">
+        <label id="wL" for="w_grid">0</label>
+
+        <p>Height of cell</p>
+        <input type="range" min="0" max="1000" value="0" id="h_grid">
+        <label id="hL" for="h_grid">0</label>
+
+        <p>Offset X</p>
+        <input type="range" min="0" max="700" value="0" id="offx_grid">
+        <label id="oxL" for="offx_grid">0</label>
+
+        <p>Offset Y</p>
+        <input type="range" min="0" max="700" value="0" id="offy_grid">
+        <label id="oyL" for="offy_grid">0</label>
+
+        <p>Amount of X grids</p>
+        <input type="range" min="0" max="500" value="0" id="nx_grid">
+        <label id="nxL" for="nx_grid">0</label>
+
+        <p>Amount of Y grids</p>
+        <input type="range" min="0" max="500" value="0" id="ny_grid">
+        <label id="nyL" for="ny_grid">0</label>
+
+        <button id="goGrid" style="align-items: center;"><p style="color: black; font-weight: 200;">Draw grid</p></button>
+    </div>
+    </div>
+
     <div class="nav" id="paletteBar">
         <button id="closePalette" class="close"><img src="icons/png/back.png" class="icon"></button>
         <h3>Palletes</h3>
         <h4>Autumn</h4>
         <div class="palette_cell_container">
-            <div class="palette" data-palette="#A31919"></div>
-            <div class="palette" data-palette="#CC2222"></div>
-            <div class="palette" data-palette="#FF4400"></div>
-            <div class="palette" data-palette="#FFBF00"></div>
-            <div class="palette" data-palette="#C4691F"></div>
-            <div class="palette" data-palette="#DA5A64"></div>
-            <div class="palette" data-palette="#F7BC9A"></div>
-            <div class="palette" data-palette="#D79072"></div>
+            <div class="palette" data-palette="#A31919" style="background-color: #A31919;"></div>
+            <div class="palette" data-palette="#CC2222" style="background-color: #CC2222;"></div>
+            <div class="palette" data-palette="#FF4400" style="background-color: #FF4400;"></div>
+            <div class="palette" data-palette="#FFBF00" style="background-color: #FFBF00;"></div>
+            <div class="palette" data-palette="#C4691F" style="background-color: #C4691F;"></div>
+            <div class="palette" data-palette="#DA5A64" style="background-color: #DA5A64;"></div>
+            <div class="palette" data-palette="#F7BC9A" style="background-color: #F7BC9A;"></div>
+            <div class="palette" data-palette="#D79072" style="background-color: #D79072;"></div>
         </div>
         <h4>Cream</h4>
         <div class="palette_cell_container">  
-            <div class="palette" data-palette="#FFC6EC"></div>
-            <div class="palette" data-palette="#C6E0FF"></div>
-            <div class="palette" data-palette="#FFF5E3"></div>
-            <div class="palette" data-palette="#FBD9CB"></div>
-            <div class="palette" data-palette="#C1C8FF"></div>
-            <div class="palette" data-palette="#8AC6D1"></div>
-            <div class="palette" data-palette="#EE9797"></div>
-            <div class="palette" data-palette="#FFD800"></div>
+            <div class="palette" data-palette="#FFC6EC" style="background-color: #FFC6EC;"></div>
+            <div class="palette" data-palette="#C6E0FF" style="background-color: #C6E0FF;"></div>
+            <div class="palette" data-palette="#FFF5E3" style="background-color: #FFF5E3;"></div>
+            <div class="palette" data-palette="#FBD9CB" style="background-color: #FBD9CB;"></div>
+            <div class="palette" data-palette="#C1C8FF" style="background-color: #C1C8FF;"></div>
+            <div class="palette" data-palette="#8AC6D1" style="background-color: #8AC6D1;"></div>
+            <div class="palette" data-palette="#EE9797" style="background-color: #EE9797;"></div>
+            <div class="palette" data-palette="#FFD800" style="background-color: #FFD800;"></div>
         </div>
 
         <h4>Ocean</h4>
         <div class="palette_cell_container">
-            <div class="palette" data-palette="#3B67AE"></div>
-            <div class="palette" data-palette="#00AEFF"></div>
-            <div class="palette" data-palette="#28E5FF"></div>
-            <div class="palette" data-palette="#00FFFF"></div>
-            <div class="palette" data-palette="#16357B"></div>
-            <div class="palette" data-palette="#2188A1"></div>
-            <div class="palette" data-palette="#49A9C9"></div>
-            <div class="palette" data-palette="#8AD1B7"></div>
+            <div class="palette" data-palette="#3B67AE" style="background-color: #3B67AE;"></div>
+            <div class="palette" data-palette="#00AEFF" style="background-color: #00AEFF;"></div>
+            <div class="palette" data-palette="#28E5FF" style="background-color: #28E5FF;"></div>
+            <div class="palette" data-palette="#00FFFF" style="background-color: #00FFFF;"></div>
+            <div class="palette" data-palette="#16357B" style="background-color: #16357B;"></div>
+            <div class="palette" data-palette="#2188A1" style="background-color: #2188A1;"></div>
+            <div class="palette" data-palette="#49A9C9" style="background-color: #49A9C9;"></div>
+            <div class="palette" data-palette="#8AD1B7" style="background-color: #8AD1B7;"></div>
         </div>
         
         <h4>Forest</h4>
         <div class="palette_cell_container">
-            <div class="palette" data-palette="#D0D270"></div>
-            <div class="palette" data-palette="#598F54"></div>
-            <div class="palette" data-palette="7DB666#"></div>
-            <div class="palette" data-palette="#F8FF7F"></div>
-            <div class="palette" data-palette="#646640"></div>
-            <div class="palette" data-palette="#7C6E35"></div>
-            <div class="palette" data-palette="#B6A666"></div>
-            <div class="palette" data-palette="#AAB208"></div>
+            <div class="palette" data-palette="#D0D270" style="background-color: #D0D270;"></div>
+            <div class="palette" data-palette="#598F54" style="background-color: #598F54;"></div>
+            <div class="palette" data-palette="7DB666#" style="background-color: #7DB666;"></div>
+            <div class="palette" data-palette="#F8FF7F" style="background-color: #F8FF7F;"></div>
+            <div class="palette" data-palette="#646640" style="background-color: #646640;"></div>
+            <div class="palette" data-palette="#7C6E35" style="background-color: #7C6E35;"></div>
+            <div class="palette" data-palette="#B6A666" style="background-color: #B6A666;"></div>
+            <div class="palette" data-palette="#AAB208" style="background-color: #AAB208;"></div>
         </div>
 
         <h4>Spring garden</h4>
         <div class="palette_cell_container">
-            <div class="palette" data-palette="#FFF5E3"></div>
-            <div class="palette" data-palette="#CD4536"></div>
-            <div class="palette" data-palette="#BC9678"></div>
-            <div class="palette" data-palette="#FFCBA2"></div>
-            <div class="palette" data-palette="#8AC6D1"></div>
-            <div class="palette" data-palette="#E69618"></div>
-            <div class="palette" data-palette="#FFE9B2"></div>
-            <div class="palette" data-palette="#ECE874"></div>
-            <div class="palette" data-palette="#EE9797"></div>
-            <div class="palette" data-palette="#6DA3DD"></div>
-            <div class="palette" data-palette="#889B5E"></div>
-            <div class="palette" data-palette="#C9B984"></div>
+            <div class="palette" data-palette="#FFF5E3" style="background-color: #FFF5E3;"></div>
+            <div class="palette" data-palette="#CD4536" style="background-color: #CD4536;"></div>
+            <div class="palette" data-palette="#BC9678" style="background-color: #BC9678;"></div>
+            <div class="palette" data-palette="#FFCBA2" style="background-color: #FFCBA2;"></div>
+            <div class="palette" data-palette="#8AC6D1" style="background-color: #8AC6D1;"></div>
+            <div class="palette" data-palette="#E69618" style="background-color: #E69618;"></div>
+            <div class="palette" data-palette="#FFE9B2" style="background-color: #FFE9B2;"></div>
+            <div class="palette" data-palette="#ECE874" style="background-color: #ECE874;"></div>
+            <div class="palette" data-palette="#EE9797" style="background-color: #EE9797;"></div>
+            <div class="palette" data-palette="#6DA3DD" style="background-color: #6DA3DD;"></div>
+            <div class="palette" data-palette="#889B5E" style="background-color: #889B5E;"></div>
+            <div class="palette" data-palette="#C9B984" style="background-color: #C9B984;"></div>
         </div>
 
         <h4>Winter</h4>
         <div class="palette_cell_container">
-            <div class="palette" data-palette="#D5D4CE"></div>
-            <div class="palette" data-palette="#EEEEEE"></div>
-            <div class="palette" data-palette="#FFFFFF"></div>
-            <div class="palette" data-palette="#F9E4E9"></div>
-            <div class="palette" data-palette="#AAC4CF"></div>
-            <div class="palette" data-palette="#D3F1FB"></div>
-            <div class="palette" data-palette="#B2AFA9"></div>
-            <div class="palette" data-palette="#D7D1C4"></div>
-            <div class="palette" data-palette="#91A0A5"></div>
-            <div class="palette" data-palette="#60807C"></div>
-            <div class="palette" data-palette="#80745A"></div>
-            <div class="palette" data-palette="#52514E"></div>
+            <div class="palette" data-palette="#D5D4CE" style="background-color: #D5D4CE;"></div>
+            <div class="palette" data-palette="#EEEEEE" style="background-color: #EEEEEE;"></div>
+            <div class="palette" data-palette="#FFFFFF" style="background-color: #FFFFFF;"></div>
+            <div class="palette" data-palette="#F9E4E9" style="background-color: #F9E4E9;"></div>
+            <div class="palette" data-palette="#AAC4CF" style="background-color: #AAC4CF;"></div>
+            <div class="palette" data-palette="#D3F1FB" style="background-color: #D3F1FB;"></div>
+            <div class="palette" data-palette="#B2AFA9" style="background-color: #B2AFA9;"></div>
+            <div class="palette" data-palette="#D7D1C4" style="background-color: #D7D1C4;"></div>
+            <div class="palette" data-palette="#91A0A5" style="background-color: #91A0A5;"></div>
+            <div class="palette" data-palette="#60807C" style="background-color: #60807C;"></div>
+            <div class="palette" data-palette="#80745A" style="background-color: #80745A;"></div>
+            <div class="palette" data-palette="#52514E" style="background-color: #52514E;"></div>
         </div>
     </div>
 

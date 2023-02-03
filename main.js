@@ -30,6 +30,7 @@ var fill_or_no = false
 var flat = false
 var contour = true
 var jitter = false
+var round = true
 
 // VALUES
 var prevX = null //var vs var
@@ -79,7 +80,7 @@ document.getElementById("save").addEventListener("click", () => {
     let canvas_image = document.createElement("a")
     canvas_image.href = data
 
-    canvas_image.download = "drawing" //file_name
+    canvas_image.download = "My BlossomField sketch" //file_name
     canvas_image.click()
 })
 
@@ -117,6 +118,8 @@ transparency_slider.addEventListener("input", () => {
     transi = transparency_slider.value;
     transparency_slider_label.innerHTML = transparency_slider.value;
 })
+
+document.getElementById("round").addEventListener("input", () => {round = !round})
 
 var radius = document.getElementById("radius");
 var radius_label = document.getElementById("radius_label");
@@ -209,7 +212,7 @@ offset_slider.addEventListener("input", () => {
 })
 
 var strokes_slider = document.getElementById("strokes_slider");
-var _strokes_sliderlabel = document.getElementById("strokes_slider_label");
+var strokes_sliderlabel = document.getElementById("strokes_slider_label");
 strokes_slider_label.innerHTML = strokes_slider.value;
 linedistance = strokes_slider.value;
 strokes_slider.addEventListener("input", () => {
@@ -232,22 +235,61 @@ let fill_checkbox = document.getElementById("fill_rect")
 
 document.getElementById("undo_button").addEventListener("click", () => undo())
 document.getElementById("redo_button").addEventListener("click", () => redo())
-document.getElementById("grid_button").addEventListener("click", () => grid())
+document.getElementById("grid_button").addEventListener("click", () => document.getElementById("gridBar").style.width = "250px")
+document.getElementById("closeGrid").addEventListener("click", () => cdocument.getElementById("gridBar").style.width = "0")
 
-var x1=300, y1=100, w1=100, h1=100, ix=350, iy=250, ngridx = 3, ngridy = 3
+var x1=0, y1=0, w1=0, h1=0, offx=0, offy=0, nx=0, ny=0
+document.getElementById("sx_grid").addEventListener("click", (e) => {
+    x1 = parseInt(e.target.value)
+    document.getElementById("sxL").innerHTML = x1
+})
+document.getElementById("sy_grid").addEventListener("click", (e) => {
+    y1 = parseInt(e.target.value)
+    document.getElementById("syL").innerHTML = y1
+})
+document.getElementById("w_grid").addEventListener("click", (e) => {
+    w1 = parseInt(e.target.value)
+    document.getElementById("wL").innerHTML = w1
+})
+document.getElementById("h_grid").addEventListener("click", (e) => {
+    h1 = parseInt(e.target.value)
+    document.getElementById("hL").innerHTML = h1
+})
+document.getElementById("offx_grid").addEventListener("click", (e) => {
+    offx = parseInt(e.target.value)
+    document.getElementById("oxL").innerHTML = offx
+})
+document.getElementById("offy_grid").addEventListener("click", (e) => {
+    offy = parseInt(e.target.value)
+    document.getElementById("oyL").innerHTML = offy
+})
+document.getElementById("nx_grid").addEventListener("click", (e) => {
+    nx = parseInt(e.target.value)
+    document.getElementById("nxL").innerHTML = nx
+})
+document.getElementById("ny_grid").addEventListener("click", (e) => {
+    ny = parseInt(e.target.value)
+    document.getElementById("nyL").innerHTML = ny
+})
+
+//var x1=300, y1=100, w1=100, h1=100, ix=350, iy=250, ngridx = 3, ngridy = 3
+
+document.getElementById("goGrid").addEventListener("click", () => {grid()})
 
 function grid(){
-    var x = 300, y = 100
-    gr_context.strokeStyle = "grey"
-    for (let i = 0; i < 3; i++){
-        for (let j = 0; j < 3; j++){
+    let xb = x1
+    //buffer variables not to change original data
+    let tx1=x1, ty1=y1
+
+    for (let i = 0; i < ny; i++){
+        for (let j = 0; j < nx; j++){
             gr_context.beginPath()
-            gr_context.rect(x1, y1, h1, w1)
+            gr_context.rect(tx1, ty1, w1, h1)
             gr_context.stroke()
-            x1 += 350 
+            tx1 += (1*offx)+(1*w1)
         }
-        y1 += 250
-        x1 = 300
+        ty1 += (1*offy)+(1*h1)
+        tx1 = x1
     }
     updateBuffer()
 
@@ -282,7 +324,9 @@ function setRGBA(r, g, b, a){
 }
 
 function updatePen(){
-    gr_context.lineCap = "round"
+    if (round)
+        gr_context.lineCap = "round"
+    else gr_context.lineCap = "butt"
     gr_context.globalAlpha = transi/100
     gr_context.lineWidth = penwi
     if (drawingMode == NEON){
@@ -314,7 +358,7 @@ function pushToBuffer(){
 }
 
 function undo(){
-    if (canvasBuffer.length > 0){
+    if ((canvasBuffer.length > 0) && (uCount < canvasBuffer.length)){
         uCount++
         gr_context.putImageData(canvasBuffer[canvasBuffer.length-uCount], 0, 0)
     }
@@ -477,8 +521,6 @@ function drawStar(startX, startY, endX, endY, ncuts){
             gr_context.lineTo(cx, cy)
             gr_context.moveTo(cx, cy)
             //gr_context.stroke()
-    
-        //console.log("from: " + cx + " " + cy + "   to: " + cx + " " + cy) 
     }
     gr_context.stroke()
     gr_context.lineTo(sx, sy)
@@ -554,29 +596,13 @@ function midPoint(x1, y1, x2, y2){
 }
 
 function draw(prevX, prevY, curX, curY){
-    pointArray.push([curX, curY])
+    //pointArray.push([curX, curY])
     gr_context.beginPath();   
 
-    if (pointArray.length < 3){
-        gr_context.moveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1])
-        gr_context.lineTo(pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1])
-    } else {
-        gr_context.moveTo(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1]);
-        gr_context.quadraticCurveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1], 
-            pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1]); // to stabilize the line
-    }
+    gr_context.moveTo(prevX, prevY)
+    gr_context.lineTo(curX, curY)
     gr_context.stroke(); 
 }
-/*
-// test
-pointArray.push([600, 400])
-pointArray.push([500, 100])
-pointArray.push([700, 400])
-gr_context.moveTo(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1]);
-gr_context.quadraticCurveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1], pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1]);
-*/
-//test
-//gr_context.fillRect(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1], 100, 100)
 
 function stroke(prevX, prevY, curX, curY){
     gr_context.globalAlpha = transi/100
