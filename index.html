@@ -12,55 +12,89 @@
 
     <div class="nav" id="sideBar">
         <fieldset>
-            <button id="close_button" class="closebtn"><img src="icons/png/close.png" height="32" width="32" class="icon"></button>
+            
         </fieldset>
         <fieldset>
-            <input class="clr" type="color" id="pen_color" title="Pen color" value="#0057b7">
-            <input class="clr" type="color" id="brush_color" title="Fill color" value="#ffd700">
+            <button id="close_button" class="close" accesskey="esc"><img src="icons/png/close.png" class="icon"></button>
+
+            <input class="userColor" type="color" id="pen_color" title="Pen color" value="#0057b7">
+            <input class="userColor" type="color" id="brush_color" title="Fill color" value="#ffd700">
+            <button id="palette_button" class="userColor"><img src="icons/png/palette.png" class="icon"></button>
             <input type="range" min="0" max="100" value="100" id="transparency_slider" title="Transparency of pen">
             <label for="transparency_slider" id="transparency_slider_label"></label>
         </fieldset>
         <fieldset>
-            <button id="undo_button" title="Undo" class="icon"><img src="icons/png/undo.png" height="32" width="32" ></button>
-            <button id="redo_button" title="Redo" class="icon"><img src="icons/png/redo.png" height="32" width="32"></button>
+            <button id="undo_button" title="Undo" class="undoredo"><img src="icons/png/undo.png" class="icon"></button>
+            <button id="redo_button" title="Redo" class="undoredo"><img src="icons/png/redo.png" class="icon"></button>
         </fieldset>
         <fieldset>
-            <button class="clear" title="Clear the canvas"><img src="icons/ico/clear.ico" class="icon"></button>
-            <button class="save" title="Save as image"><img src="icons/ico/save.ico" class="icon"></button>
+            <button id="save" title="Save as image"><img src="icons/png/save.png" class="icon"></button>
+            <button id="clear" title="Clear the canvas"><img src="icons/png/clear.png" class="icon"></button>
+            
         </fieldset>
         <fieldset>
-            <button id="draw_button" title="Pen"><img src="icons/ico/pen.ico" class="icon"></button>
-            <button id="bridge_button" title="Bridge pen"><img src="icons/png/connective.png" height="32" width="32" class="icon"></button>
-            <button id="airbrush_button" title="Airbrush"><img src="icons/png/airbrush.png" height="32" width="32" class="icon"></button>
-            <button id="drops_button" title="Drops"><img src="icons/png/drops.png" height="32" width="32" class="icon"></button>
-            <button id="strokes_button" title="Strokes"><img src="icons/png/strokes.png" height="32" width="32" class="icon"></button>
-            <button id="rect_button" title="Rectangle"><img src="icons/ico/rectangle.ico" class="icon"></button>
-            <button id="ellipse_button"title="Ellipse"><img src="icons/ico/ellipse.ico" class="icon"></button>
-            <button id="scatter_button" title="Scatter"><img src="icons/ico/scatter.ico" class="icon"></button>
-            <button id="neon_button" title="Neon pen"><img src="icons/ico/color_changer.ico" class="icon"></button>
-            <button id="star_button" title="Star"><img src="icons/png/star.png" height="32" width="32" class="icon"></button>
-            <button id="invert_button" title="Invert filter"><img src="icons/png/invert.png" height="32" width="32" class="icon"></button>
+            <button id="draw_button" title="Pen"><img src="icons/png/pen.png" class="icon"></button>
+            <button id="bridge_button" title="Bridge pen"><img src="icons/png/bridge.png" class="icon"></button>
+            <button id="airbrush_button" title="Airbrush"><img src="icons/png/airbrush.png" class="icon"></button>
+            <button id="drops_button" title="Drops"><img src="icons/png/drops.png" class="icon"></button>
+            <button id="strokes_button" title="Strokes"><img src="icons/png/strokes.png" class="icon"></button>
+            
+            <button id="scatter_button" title="Scatter"><img src="icons/png/scatter.png" class="icon"></button>
+            <button id="neon_button" title="Neon pen"><img src="icons/png/neon.png" class="icon"></button>
+            
+            <button id="invert_button" title="Invert filter"><img src="icons/png/invert.png" class="icon"></button>
+            <button id="grid_button" title="Add grid"><img src="icons/png/dot.png" class="icon"></button>
         </fieldset>
-        <fieldset><button id="baza_button" title="Watermelon"><img src="icons/png/baza.png" height="32" width="32" class="icon"></button></fieldset>
+
         <fieldset>
-            <h4>Pen</h4>
-            <p>Main pen size</p>
-            <input type="range" min="1" max="50" value="1" id="pen_size" title="Sets the size for main pen">
+            <button id="rect_button" title="Rectangle"><img src="icons/png/rectangle.png" class="icon"></button>
+            <button id="ellipse_button"title="Ellipse"><img src="icons/png/ellipse.png" class="icon"></button>
+            <button id="star_button" title="Star"><img src="icons/png/star.png" class="icon"></button>
+        </fieldset>
+
+        <fieldset><button id="baza_button" title="Watermelon"><img src="icons/png/baza.png" class="icon"></button></fieldset>
+        <fieldset><div class="settings_container">
+            <p>Stroke width</p>
+            <input type="range" min="1" max="100" value="1" id="pen_size" title="Sets the width of drawing line">
             <label for="pen_size" id="pen_size_label"></label>
 
             <p>Secondary size</p>
-            <input type="range" min="10" max="100" value="50" id="radius" title="Sets the size for secondary properties(size of scatter, size of neon light etc.)">
+            <input type="range" min="10" max="500" value="50" id="radius" title="Sets the size for secondary properties(size of scatter, size of neon light etc.)">
             <label for="radius" id="radius_label"></label>
+            <p><b>Settings</b></p>
+            <button id="settings_button" class="settings_button"><img src="icons/png/settings.png" class="icon"></button>
+        </div>
+            
+        </fieldset>
+        </div>
 
+        <div class="nav" id="settingsBar">
+            <button id="close_settings" class="close"><img src="icons/png/back.png" class="icon"></button>        
+        <fieldset>
+            <h3>Scatter</h3>
             <p>Particle density</p>
             <input type="range" min="1" max="40" value="20" id="density" title="Density of dots in scatter">
             <label for="density" id="density_label"></label>
 
-            <p>Jitter</p>
-            <input type="range" min="0" max="100" value="15" id="jitter_slider" title="Randomness range">
+            <input type="checkbox" id="flat" unchecked>
+            <label for="flat" title="Sets whether dots in scatter look naturally or flat">Flat spray</label>
+            
+            <h3>Randomize</h3>
+            <p>Randomness range</p>
+            <input type="range" min="0" max="100" value="15" id="jitter_slider" title="Randomness range(for specific tools)">
             <label for="jitter_slider" id="jitter_slider_label"></label>
 
-            <h4>Star</h4>
+            <input type="checkbox" id="jitter" unchecked>
+            <label for="jitter" title="To randomize size and opacity of a drawing tool">Enable jitter</label>
+
+            <h3>Rectangle/ellipse</h3>
+            <input type="checkbox" id="fill_rect" unchecked>
+            <label for="fill_rect" title="To fill rectangle or ellipse">fill</label>
+
+            <input type="checkbox" id="contour" checked>
+            <label for="contour" title="Rectangle or ellipse to have a border">contour</label>
+
+            <h3>Star</h3>
             <p>Star corners</p>
             <input type="range" min="3" max="50" value="5" id="star_ncuts" title="Amount of corners in a star">
             <label for="star_ncuts" id="star_ncuts_label"></label>
@@ -69,7 +103,7 @@
             <input type="range" min="1" max="10" value="2" id="inner_radius" title="Inner radius of star">
             <label for="inner_radius" id="inner_radius_label"></label>
 
-            <h4>Bridge</h4>
+            <h3>Bridge</h3>
             <p>Point recentness</p>
             <input type="range" min="5" max="300" value="10" id="recentness_slider" title="Sets how many previous points to connect with(the higher is amount the lower is speed)">
             <label for="recentness_slider" id="recentness_slider_label"></label>
@@ -86,7 +120,7 @@
             <input type="range" min="0" max="5" value="0" id="offset_slider" title="Sets the offset of connective line(at both sides)">
             <label for="offset_slider" id="offset_slider_label"></label>
 
-            <h4>Strokes</h4>
+            <h3>Strokes</h3>
             <p>Distance between lines</p>
             <input type="range" min="2" max="50" value="7" id="strokes_slider" title="Distance between lines in a stroke">
             <label for="strokes_slider" id="strokes_slider_label"></label>
@@ -94,27 +128,95 @@
             <p>Amount of lines</p>
             <input type="range" min="2" max="15" value="4" id="nstrokes_slider" title="Amount of lines in a stroke">
             <label for="nstrokes_slider" id="nstrokes_slider_label"></label>
-
-        </fieldset>
-        <fieldset>
-            <input type="checkbox" id="fill_rect" unchecked>
-            <label for="fill_rect" title="To fill rectangle or ellipse">fill</label>
-
-            <input type="checkbox" id="flat" unchecked>
-            <label for="flat" title="Sets whether dots in scatter look naturally or flat">flat spray</label>
-
-            <input type="checkbox" id="contour" checked>
-            <label for="contour" title="Rectangle or ellipse to have a border">contour</label>
-
-            <input type="checkbox" id="jitter" unchecked>
-            <label for="jitter" title="To randomize size and opacity of a drawing tool">jitter</label>
-        </fieldset>
     </div>
 
-    <span class="menuButton"><button id="menu_button" title="Show menu"><img src="icons/png/menu.png" height="32" width="32" class="icon"></button></span>
+    <div class="nav" id="paletteBar">
+        <button id="closePalette" class="close"><img src="icons/png/back.png" class="icon"></button>
+        <h3>Palletes</h3>
+        <h4>Autumn</h4>
+        <div class="palette_cell_container">
+            <div class="palette" data-palette="#A31919"></div>
+            <div class="palette" data-palette="#CC2222"></div>
+            <div class="palette" data-palette="#FF4400"></div>
+            <div class="palette" data-palette="#FFBF00"></div>
+            <div class="palette" data-palette="#C4691F"></div>
+            <div class="palette" data-palette="#DA5A64"></div>
+            <div class="palette" data-palette="#F7BC9A"></div>
+            <div class="palette" data-palette="#D79072"></div>
+        </div>
+        <h4>Cream</h4>
+        <div class="palette_cell_container">  
+            <div class="palette" data-palette="#FFC6EC"></div>
+            <div class="palette" data-palette="#C6E0FF"></div>
+            <div class="palette" data-palette="#FFF5E3"></div>
+            <div class="palette" data-palette="#FBD9CB"></div>
+            <div class="palette" data-palette="#C1C8FF"></div>
+            <div class="palette" data-palette="#8AC6D1"></div>
+            <div class="palette" data-palette="#EE9797"></div>
+            <div class="palette" data-palette="#FFD800"></div>
+        </div>
+
+        <h4>Ocean</h4>
+        <div class="palette_cell_container">
+            <div class="palette" data-palette="#3B67AE"></div>
+            <div class="palette" data-palette="#00AEFF"></div>
+            <div class="palette" data-palette="#28E5FF"></div>
+            <div class="palette" data-palette="#00FFFF"></div>
+            <div class="palette" data-palette="#16357B"></div>
+            <div class="palette" data-palette="#2188A1"></div>
+            <div class="palette" data-palette="#49A9C9"></div>
+            <div class="palette" data-palette="#8AD1B7"></div>
+        </div>
+        
+        <h4>Forest</h4>
+        <div class="palette_cell_container">
+            <div class="palette" data-palette="#D0D270"></div>
+            <div class="palette" data-palette="#598F54"></div>
+            <div class="palette" data-palette="7DB666#"></div>
+            <div class="palette" data-palette="#F8FF7F"></div>
+            <div class="palette" data-palette="#646640"></div>
+            <div class="palette" data-palette="#7C6E35"></div>
+            <div class="palette" data-palette="#B6A666"></div>
+            <div class="palette" data-palette="#AAB208"></div>
+        </div>
+
+        <h4>Spring garden</h4>
+        <div class="palette_cell_container">
+            <div class="palette" data-palette="#FFF5E3"></div>
+            <div class="palette" data-palette="#CD4536"></div>
+            <div class="palette" data-palette="#BC9678"></div>
+            <div class="palette" data-palette="#FFCBA2"></div>
+            <div class="palette" data-palette="#8AC6D1"></div>
+            <div class="palette" data-palette="#E69618"></div>
+            <div class="palette" data-palette="#FFE9B2"></div>
+            <div class="palette" data-palette="#ECE874"></div>
+            <div class="palette" data-palette="#EE9797"></div>
+            <div class="palette" data-palette="#6DA3DD"></div>
+            <div class="palette" data-palette="#889B5E"></div>
+            <div class="palette" data-palette="#C9B984"></div>
+        </div>
+
+        <h4>Winter</h4>
+        <div class="palette_cell_container">
+            <div class="palette" data-palette="#D5D4CE"></div>
+            <div class="palette" data-palette="#EEEEEE"></div>
+            <div class="palette" data-palette="#FFFFFF"></div>
+            <div class="palette" data-palette="#F9E4E9"></div>
+            <div class="palette" data-palette="#AAC4CF"></div>
+            <div class="palette" data-palette="#D3F1FB"></div>
+            <div class="palette" data-palette="#B2AFA9"></div>
+            <div class="palette" data-palette="#D7D1C4"></div>
+            <div class="palette" data-palette="#91A0A5"></div>
+            <div class="palette" data-palette="#60807C"></div>
+            <div class="palette" data-palette="#80745A"></div>
+            <div class="palette" data-palette="#52514E"></div>
+        </div>
+    </div>
+
+
+    <span class="menuButton"><button id="menu_button" title="Show menu"><img src="icons/png/menu.png" class="icon"></button></span>
 
     <div id="main"><canvas id="ground" style="left: 160;"></canvas></div>
-        
     <script src="main.js"></script>
     </body>
 </html>

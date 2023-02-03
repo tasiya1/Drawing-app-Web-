@@ -4,12 +4,13 @@
 }
 
 body {
-  font-family: Ebrima;
-  color: #ffffff;
+  font-family: "Candara Light";
+  color: #eaeaea;
 }
 
 canvas { 
   border: 1px solid #ccc;
+  overflow: hidden;
 }
 
 input {
@@ -17,7 +18,7 @@ input {
 }
 
 fieldset{
-  padding: 10px;
+  padding: 5px;
   border-color: transparent;
 }
 
@@ -33,39 +34,36 @@ fieldset{
   justify-content: space-around;*/
   
   height: 100%;
-  width: 0;
+  width: 0px;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   left: 0;
-  background-color: rgba(41, 41, 41, 0.7);
+  background-image: url(design/background.png);
   overflow-x: hidden;
   padding-top: 0px;
   transition: 0.3s;
   display: inline-flexbox;
 }
 
+.undoredo{
+  background-color: #000000;
+  border-radius: 50%;
+}
+
 .menuButton{
-  position: fixed;
+  position:fixed;
+  z-index: 5;
   top: 0;
   left: 0;
   padding-top: 0px;
-  transition: 0.0s;
-}
-
-.pen_size{
-  height: 16;
+  transition: duration 0ms;
+  background-color: rgba(0,0,0,0);
 }
 
 .icon{
-  height: 32;
-width: 32;
-}
-
-.clr{
-  height: 50px;
-  width: 50px;
-
+  height: 30px;
+  width: 30px;
 }
 
 button{
@@ -80,14 +78,38 @@ button{
   transition: 0.3s;
 }
 
+h3{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
 .sidenav button:hover {
   color: #f1f1f1;
 }
 
-.sidenav .closebtn {
-  position: absolute;
+.close {
+  background-color: #00000000;
+  float: right;
+}
+
+.userColor{
+  margin-top: 20px;
+  height: 50px;
+  width: 50px;
+}
+
+.settings_container{
+  display: list-item;
+}
+
+.settings_button{
+  background-color: #00000000;
+  border-radius: 50%;
+}
+
+.nav .close_settings{
   top: 0;
-  right: 25px;
+  right: 0;
   margin: 50px;
 }
 
@@ -96,6 +118,88 @@ button:hover{
     opacity: 1;
     transform: scale(1.2);
 }
-.save{
-  background-color: #ffffff;
+
+/* Palette colors */
+
+.palette{
+  height: 30px;
+  width: 30px;
+  background-color: #00000000;
+  clear: both;
+  margin: 5px;
 }
+
+.palette_cell_container{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+/* AUTUMN */
+.palette :nth-child(1){ background-color: #A31919;}
+.palette :nth-child(2){ background-color: #CC2222;}
+.palette :nth-child(3){ background-color: #FF4400;}
+.palette :nth-child(4){ background-color: #FFBF00;}
+.palette :nth-child(5){ background-color: #C4691F;}
+.palette :nth-child(6){ background-color: #DA5A64;}
+.palette :nth-child(7){ background-color: #F7BC9A;}
+.palette :nth-child(8){ background-color: #D79072;}
+
+/* PASTEL */
+.palette :nth-child(9){ background-color: #FFC6EC;}
+.palette :nth-child(10){ background-color: #C6E0FF;}
+.palette :nth-child(11){ background-color: #FFF5E3;}
+.palette :nth-child(12){ background-color: #FBD9CB;}
+.palette :nth-child(13){ background-color: #C1C8FF;}
+.palette :nth-child(14){ background-color: #8AC6D1;}
+.palette :nth-child(15){ background-color: #EE9797;}
+.palette :nth-child(16){ background-color: #FFD800;}
+
+/* OCEAN */
+.palette :nth-child(17){ background-color: #3B67AE;}
+.palette :nth-child(18){ background-color: #00AEFF;}
+.palette :nth-child(19){ background-color: #28E5FF;}
+.palette :nth-child(20){ background-color: #00FFFF;}
+.palette :nth-child(21){ background-color: #16357B;}
+.palette :nth-child(22){ background-color: #2188A1;}
+.palette :nth-child(23){ background-color: #49A9C9;}
+.palette :nth-child(24){ background-color: #8AD1B7;}
+
+/* FOREST */
+.palette :nth-child(25){ background-color: #D0D270;}
+.palette :nth-child(26){ background-color: #598F54;}
+.palette :nth-child(27){ background-color: #7DB666;}
+.palette :nth-child(28){ background-color: #F8FF7F;}
+.palette :nth-child(29){ background-color: #646640;}
+.palette :nth-child(30){ background-color: #7C6E35;}
+.palette :nth-child(31){ background-color: #B6A666;}
+.palette :nth-child(32){ background-color: #AAB208;}
+
+/* SPRING GARDEN */
+.palette :nth-child(33){ background-color: #FFF5E3;}
+.palette :nth-child(34){ background-color: #CD4536;}
+.palette :nth-child(35){ background-color: #BC9678;}
+.palette :nth-child(36){ background-color: #FFCBA2;}
+.palette :nth-child(37){ background-color: #8AC6D1;}
+.palette :nth-child(38){ background-color: #E69618;}
+.palette :nth-child(39){ background-color: #FFE9B2;}
+.palette :nth-child(40){ background-color: #ECE874;}
+.palette :nth-child(41){ background-color: #EE9797;}
+.palette :nth-child(42){ background-color: #6DA3DD;}
+.palette :nth-child(43){ background-color: #889B5E;}
+.palette :nth-child(44){ background-color: #C9B984;}
+
+/* WINTER */
+.palette :nth-child(45){ background-color: #D5D4CE;}
+.palette :nth-child(46){ background-color: #EEEEEE;}
+.palette :nth-child(47){ background-color: #FFFFFF;}
+.palette :nth-child(48){ background-color: #F9E4E9;}
+.palette :nth-child(49){ background-color: #AAC4CF;}
+.palette :nth-child(50){ background-color: #D3F1FB;}
+.palette :nth-child(51){ background-color: #B2AFA9;}
+.palette :nth-child(52){ background-color: #D7D1C4;}
+.palette :nth-child(53){ background-color: #91A0A5;}
+.palette :nth-child(54){ background-color: #60807C;}
+.palette :nth-child(55){ background-color: #80745A;}
+.palette :nth-child(56){ background-color: #52514E;}

@@ -7,8 +7,7 @@ const gr_context = canvas.getContext("2d", { willReadFrequently: true })
 gr_context.fillStyle = "white"
 gr_context.fillRect(0, 0, canvas.width, canvas.height)
 
-const MAX_BUFFER_SIZE = 5
-
+const MAX_BUFFER_SIZE = 10
 
 // DRAWING MODES
 const DRAW = 1
@@ -64,15 +63,17 @@ gr_context.strokeStyle = "#0057b7"
 //gr_context.strokeStyle = "rgba(25, 71, 241, 0.1)"
 gr_context.fillStyle = "#ffd700"
 
-document.querySelector(".clear").addEventListener("click", () => {
+document.getElementById("clear").addEventListener("click", () => {
+    gr_context.globalAlpha = 1
     gr_context.fillStyle = color2
     gr_context.fillRect(0, 0, canvas.width, canvas.height)
     gr_context.beginPath();
+    updateBuffer()
     //canvas.width = canvas.width
     //canvas.height = canvas.height
 })
 
-document.querySelector(".save").addEventListener("click", () => {
+document.getElementById("save").addEventListener("click", () => {
     //var  file_name = prompt("Повне ім'я файлу:");
     let data = canvas.toDataURL("imag/jpg")
     let canvas_image = document.createElement("a")
@@ -231,7 +232,38 @@ let fill_checkbox = document.getElementById("fill_rect")
 
 document.getElementById("undo_button").addEventListener("click", () => undo())
 document.getElementById("redo_button").addEventListener("click", () => redo())
+document.getElementById("grid_button").addEventListener("click", () => grid())
 
+var x1=300, y1=100, w1=100, h1=100, ix=350, iy=250, ngridx = 3, ngridy = 3
+
+function grid(){
+    var x = 300, y = 100
+    gr_context.strokeStyle = "grey"
+    for (let i = 0; i < 3; i++){
+        for (let j = 0; j < 3; j++){
+            gr_context.beginPath()
+            gr_context.rect(x1, y1, h1, w1)
+            gr_context.stroke()
+            x1 += 350 
+        }
+        y1 += 250
+        x1 = 300
+    }
+    updateBuffer()
+
+   /* var x = 300, y = 100
+    gr_context.strokeStyle = "grey"
+for (let i = 0; i < 3; i++){
+    for (let j = 0; j < 3; j++){
+        gr_context.beginPath()
+        gr_context.rect(x, y, 200, 200)
+        gr_context.stroke()
+        x += 350 
+    }
+    y += 250
+    x = 300
+}*/
+}
 
 function rand(from, to){
     let r = Math.floor(Math.random() * (to - from) + from);
@@ -301,11 +333,10 @@ function updateBuffer(){ // updating the buffer after evry user's action
     }
 
     uCount = 0 // setting undo counter to 0 as user added something to canvas
-    if (bufferSizeIsLegal()){
-        pushToBuffer()
-    } else { // erasing the outdated snapshot
-        canvasBuffer.shift()
-    }
+    if (!bufferSizeIsLegal())
+        canvasBuffer.shift() // erasing the outdated snapshot
+
+    pushToBuffer() //then push
 }
 
 function colorFilter(){
@@ -444,12 +475,10 @@ function drawStar(startX, startY, endX, endY, ncuts){
             }
                 
             gr_context.lineTo(cx, cy)
-            
             gr_context.moveTo(cx, cy)
-            
             //gr_context.stroke()
     
-        console.log("from: " + cx + " " + cy + "   to: " + cx + " " + cy) 
+        //console.log("from: " + cx + " " + cy + "   to: " + cx + " " + cy) 
     }
     gr_context.stroke()
     gr_context.lineTo(sx, sy)
@@ -525,13 +554,29 @@ function midPoint(x1, y1, x2, y2){
 }
 
 function draw(prevX, prevY, curX, curY){
-    var p = midPoint(prevX, prevY, curX, curY)
-    gr_context.beginPath();
-    gr_context.moveTo(prevX, prevY);
-    gr_context.quadraticCurveTo(p[0], p[1], curX, curY);
-    gr_context.closePath();
-    gr_context.stroke();
+    pointArray.push([curX, curY])
+    gr_context.beginPath();   
+
+    if (pointArray.length < 3){
+        gr_context.moveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1])
+        gr_context.lineTo(pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1])
+    } else {
+        gr_context.moveTo(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1]);
+        gr_context.quadraticCurveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1], 
+            pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1]); // to stabilize the line
+    }
+    gr_context.stroke(); 
 }
+/*
+// test
+pointArray.push([600, 400])
+pointArray.push([500, 100])
+pointArray.push([700, 400])
+gr_context.moveTo(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1]);
+gr_context.quadraticCurveTo(pointArray[pointArray.length - 2][0], pointArray[pointArray.length - 2][1], pointArray[pointArray.length - 1][0], pointArray[pointArray.length - 1][1]);
+*/
+//test
+//gr_context.fillRect(pointArray[pointArray.length - 3][0], pointArray[pointArray.length - 3][1], 100, 100)
 
 function stroke(prevX, prevY, curX, curY){
     gr_context.globalAlpha = transi/100
@@ -551,6 +596,7 @@ function drops(prevX, prevY, curX, curY){
     gr_context.globalAlpha = Math.random()
     gr_context.beginPath()
     //gr_context.moveTo(prevX, prevY);
+    //gr_context.arc(rand(prevX-jitter_range, prevX+jitter_range), rand(prevY-jitter_range, prevY+jitter_range), Math.random()*diami, 0, 2*Math.PI, true)
     gr_context.arc(prevX+Math.random()*jitter_range, prevY+Math.random()*jitter_range, Math.random()*diami, 0, 2*Math.PI, true)
     gr_context.fill()
     gr_context.stroke()
@@ -568,9 +614,9 @@ function angleBetweenPoints(prevX, prevY, curX, curY){
 }
 
 function extractRGB(color){
-    const R = parseInt(color.substr(1,2), 16)
-    const G = parseInt(color.substr(3,2), 16)
-    const B = parseInt(color.substr(5,2), 16)
+    var R = parseInt(color.substr(1,2), 16)
+    var G = parseInt(color.substr(3,2), 16)
+    var B = parseInt(color.substr(5,2), 16)
     return [R, G, B]
 }
 
@@ -643,6 +689,7 @@ function watermelon(prevX, prevY, curX, curY){
     gr_context.stroke()
 */
     gr_context.strokeStyle = "rgba(0,0,0,0)"
+    gr_context.lineWidth = 1
     gr_context.beginPath()
     gr_context.fillStyle = green
     gr_context.arc(centreX, centreY, rad, 0, Math.PI)
@@ -668,7 +715,7 @@ function watermelon(prevX, prevY, curX, curY){
     for (let i = 0; i < 20; i++){
         seed = pointsWithinCircle(rad*0.8, centreX, centreY)
         if (seed[1] >= centreY)
-            drawStar(seed[0], seed[1], seed[0]+jitter_range*Math.random(), seed[1]+jitter_range*Math.random(), 10)
+            drawStar(seed[0], seed[1], seed[0]+jitter_range*Math.random(), seed[1]+jitter_range*Math.random(), ncuts*2)
     }
 }
 
@@ -676,8 +723,6 @@ canvas.addEventListener("mousemove", (ev) => {
 
     var curX = ev.clientX
     var curY = ev.clientY
-
-    pointArray.push([curX, curY]) // pushing to array of path points
 
     if (jitter){
         gr_context.lineWidth = Math.random()*penwi
@@ -691,6 +736,9 @@ canvas.addEventListener("mousemove", (ev) => {
         prevY = ev.clientY
         //return
     } else if (is_drawing){
+
+        pointArray.push([curX, curY]) // pushing to array of path points
+
         if(drawingMode == DRAW || drawingMode == NEON){
             draw(prevX, prevY, curX, curY)
         } else if (drawingMode == BRIDGE) {
@@ -716,10 +764,25 @@ document.getElementById("close_button").addEventListener("click", () => {
     document.getElementById("sideBar").style.width = "0";
 })
 document.getElementById("menu_button").addEventListener("click", () => {
+    document.getElementById("menu_button").style.opacity = "0";    
     document.getElementById("sideBar").style.width = "250px";
-    document.getElementById("menu_button").style.opacity = "0";
 })
 
-window.onbeforeunload = function() {
-    return "";
-}
+document.getElementById("palette_button").addEventListener("click", () =>{document.getElementById("paletteBar").style.width = "250px";})
+document.getElementById("closePalette").addEventListener("click", () => {document.getElementById("paletteBar").style.width = "0"})
+
+var palette = document.querySelectorAll(".palette")
+palette = Array.from(palette)
+palette.forEach(palette_color => {
+    palette_color.addEventListener("click", () => {
+        color1 = palette_color.dataset.palette
+        pen_color.value = palette_color.dataset.palette
+    })    
+})
+
+document.getElementById("settings_button").addEventListener("click", () => {document.getElementById("settingsBar").style.width = "250px";})
+document.getElementById("close_settings").addEventListener("click", () => {document.getElementById("settingsBar").style.width = "0";})
+
+// SETTINGS HANDLING
+
+window.onbeforeunload = function() {return "";}
