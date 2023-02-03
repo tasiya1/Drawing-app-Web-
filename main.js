@@ -80,7 +80,7 @@ document.getElementById("save").addEventListener("click", () => {
     let canvas_image = document.createElement("a")
     canvas_image.href = data
 
-    canvas_image.download = "My BlossomField sketch" //file_name
+    canvas_image.download = "My Blooming sketch" //file_name
     canvas_image.click()
 })
 
